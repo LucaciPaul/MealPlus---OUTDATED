@@ -1,5 +1,7 @@
 package lucacipaul.mealplus;
 
+import java.util.Date;
+
 public class User {
 
 	private Title title;
@@ -7,6 +9,7 @@ public class User {
 	private String lastName;
 	private String email;
 	private String pwd;
+	private Date registrationDate;
 
 	public Title getTitle() {
 		return this.title;
@@ -68,4 +71,11 @@ public class User {
 		this.pwd = pwd;
 	}
 
+	public Date getRegistrationDate() {
+		return registrationDate;
+	}
+
+	public void setRegistrationDate(Date registrationDate) {
+		this.registrationDate = registrationDate;
+	}
 }
