@@ -6,8 +6,19 @@ public class DataManager {
 
 	private static DataManager instance = null;
 
-	private DataManager() {
+	private ArrayList<User> users = new ArrayList<>();
 
+	private DataManager() {
+		SetupDummyData();
+	}
+
+	private void SetupDummyData() {
+
+		User dummyCustomer1 = new Customer();
+		dummyCustomer1.setEmail("test@gmail.com");
+		dummyCustomer1.setPwd("password");
+
+		register(dummyCustomer1);
 	}
 
 	public static DataManager getInstance() {
@@ -66,8 +77,15 @@ public class DataManager {
 	 * @param pwd
 	 */
 	public boolean login(String email, String pwd) {
-		// TODO - implement DataManager.login
-		throw new UnsupportedOperationException();
+		for(int i = 0; i < users.size(); i++) {
+			if(users.get(i).getEmail().equals(email)) {
+				// Found user that has the specified email,
+				// return if the password matchs.
+				return users.get(i).getPwd().equals(pwd);
+			}
+		}
+		// Email was not found in the users array.
+		return false;
 	}
 
 	/**
@@ -75,8 +93,14 @@ public class DataManager {
 	 * @param user
 	 */
 	public boolean register(User user) {
-		// TODO - implement DataManager.register
-		throw new UnsupportedOperationException();
+		// Sanity checks to make sure the email
+		// does not exist.
+		for(int i = 0; i < users.size(); i++) {
+			if(users.get(i).getEmail().equals(user.getEmail()))
+				return false; // Email already exists.
+		}
+
+		return users.add(user);
 	}
 
 	/**
