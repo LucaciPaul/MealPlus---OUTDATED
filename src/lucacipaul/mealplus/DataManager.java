@@ -9,19 +9,11 @@ public class DataManager {
 
 	private static DataManager instance = null;
 
-	private ArrayList<User> users = new ArrayList<>();
+	private ArrayList<User> users;
 
 	private DataManager() {
-		SetupDummyData();
-	}
-
-	private void SetupDummyData() {
-
-		User dummyCustomer1 = new Customer();
-		dummyCustomer1.setEmail("test@gmail.com");
-		dummyCustomer1.setPwd("password");
-
-		register(dummyCustomer1);
+		Dummy.set();
+		users = Dummy.customers; // Err
 	}
 
 	public static DataManager getInstance() {
@@ -146,7 +138,7 @@ public class DataManager {
 		throw new UnsupportedOperationException();
 	}
 
-	public static String hashPassword(User user, String password) {
+	public String hashPassword(User user, String password) {
 		// SHA-256 is virtually uncrackable, however due to it's
 		// relatively fast computation times it's not ideal to store passwords with,
 		// as rainbow table attacks could easily "crack" common password.

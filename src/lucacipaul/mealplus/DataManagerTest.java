@@ -18,7 +18,7 @@ public class DataManagerTest {
         testCustomer.setLastName("test");
         testCustomer.setFirstName("test");
         testCustomer.setRegistrationDate(new Date());
-        testCustomer.setPwd(DataManager.hashPassword(testCustomer, "password"));
+        testCustomer.setPwd(dataManager.hashPassword(testCustomer, "password"));
 
         // Can't get assert to work, fuck java tbh.
         System.out.println ("Name       Expected value:     Result");
