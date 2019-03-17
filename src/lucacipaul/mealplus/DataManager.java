@@ -1,6 +1,7 @@
 package lucacipaul.mealplus;
 
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -149,9 +150,10 @@ public class DataManager {
 		ArrayList<User> users = searchAccount(email);
 		if(users.size() == 1 && users.get(0).getEmail().equalsIgnoreCase(email)) {
 			User usr = users.get(0);
-			if(usr.getPwd().equals(hashPassword(usr, pwd)))
+			if(usr.getPwd().equals(hashPassword(usr, pwd))) { // Critical bug fixed here, make sure to have { } @Paul.
 				loggedUser = usr;
 				return usr;
+			}
 		}
 		// Email was not found in the users array.
 		return null;
@@ -177,8 +179,10 @@ public class DataManager {
 		if(!users.isEmpty()) {
 			return false;
 		}
-		
-		return Dummy.customers.add((Customer) user); // corrupt due to unvalid downcasting
+
+		if(user instanceof Customer) return Dummy.customers.add((Customer) user); // corrupt due to unvalid downcasting
+		if(user instanceof Adviser) return Dummy.advisers.add((Adviser) user);
+		return false;
 	}
 
 	/**
@@ -242,11 +246,11 @@ public class DataManager {
 
 		// Salt password in order to protect it from rainbow table attacks.
 		String saltedPassword = user.getLastName() + password + user.getLastName() + user.getRegistrationDate().toString();
-		byte[] hashedBytes = md.digest(saltedPassword.getBytes(Charset.forName("UTF_8")));
+		byte[] hashedBytes = md.digest(saltedPassword.getBytes(StandardCharsets.UTF_8)); // Charset.forName("UTF_8") - does not actually work. " java.nio.charset.UnsupportedCharsetException: UTF_8"
 
 		// Convert hash bytes back to a string, as User contains
 		// a string, and return it.
-		return new String(hashedBytes, Charset.forName("UTF_8"));
+		return new String(hashedBytes, StandardCharsets.UTF_8);
 	}
 
 	private static boolean sanityCheckInputField(String input, boolean password) {

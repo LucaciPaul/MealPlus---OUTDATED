@@ -47,9 +47,9 @@ public class DataManagerTest {
 		String email = reader.next();
 		System.out.println("Password: ");
 		String pwd = reader.next();
-		
-		User valid;
-		valid = DataManager.getInstance().login(email, pwd); // polymorphism of login
+
+		// Why 2 lines here @Paul? Seems like a very old style of programming.
+		User valid = DataManager.getInstance().login(email, pwd); // polymorphism of login
 		
 		if(valid != null) {
 			System.out.println("Success!\n\n");
@@ -71,12 +71,13 @@ public class DataManagerTest {
 		System.out.println("Password: ");
 		String pwd = reader.next();
 		
-		User usr = new User();
+		User usr = new Customer(); // Cannot create a User by it self, must be either Customer, Adviser or Admin.
 		usr.setEmail(email);
 		usr.setFirstName(firstName);
 		usr.setLastName(lastName);
 		usr.setTitle(Title.Mx);
 		usr.setPwd(pwd);
+		usr.setRegistrationDate(new Date()); // Set registration date to now.
 		
 		/*int accountType = registerOptions();
 		boolean valid;
