@@ -17,8 +17,8 @@ public class Recipe extends Items {
 	 * @param ingredients
 	 */
 	public void setIngredients(ArrayList<String> ingredients) {
-		// TODO - implement Recipe.setIngredients
-		throw new UnsupportedOperationException();
+		// Is this all we need to do here? Strange that this was not automatically completed as a getter and setter, am I missing something here?
+		this.ingredients = ingredients;
 	}
 
 	public String getTutorial() {

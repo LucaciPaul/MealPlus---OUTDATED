@@ -1,5 +1,7 @@
 package lucacipaul.mealplus;
 
+import com.sun.javaws.exceptions.InvalidArgumentException;
+
 import java.util.*;
 
 public class DietLog {
@@ -84,8 +86,7 @@ public class DietLog {
 	 * @param meal
 	 */
 	public void addMealEntry(DietLogEntry entry, Meal meal) {
-		// TODO - implement DietLog.addMealEntry
-		throw new UnsupportedOperationException();
+		getMealArray(meal).add(entry);
 	}
 
 	public float getCaloriesTotal() {
@@ -136,4 +137,15 @@ public class DietLog {
 		this.proteinsTotal = proteinsTotal;
 	}
 
+	private ArrayList<DietLogEntry> getMealArray(Meal meal) {
+		switch (meal) {
+			case Breakfast: return this.breakfast;
+			case Lunch: return this.lunch;
+			case Dinner: return this.dinner;
+			case SnackOne: return this.snack1;
+			case SnackTwo: return this.snack2;
+			case SnackThree: return this.snack3;
+			default: throw new IllegalArgumentException("Meal type not implemented in getMealArray().");
+		}
+	}
 }

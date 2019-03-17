@@ -2,7 +2,7 @@ package lucacipaul.mealplus;
 
 import java.util.*;
 
-public class Items {
+public class Items extends IApprovable {
 
 	private String name;
 	private User author;

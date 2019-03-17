@@ -8,8 +8,7 @@ public class Admin extends User {
 	 * @param allow
 	 */
 	public void reviewAdviser(Adviser adviser, boolean allow) {
-		// TODO - implement Admin.reviewAdviser
-		throw new UnsupportedOperationException();
+		adviser.setApproved(allow);
 	}
 
 	/**
@@ -18,8 +17,7 @@ public class Admin extends User {
 	 * @param allow
 	 */
 	public void reviewRecipe(Recipe recipe, boolean allow) {
-		// TODO - implement Admin.reviewRecipe
-		throw new UnsupportedOperationException();
+		recipe.setApproved(allow);
 	}
 
 	/**
@@ -28,8 +26,7 @@ public class Admin extends User {
 	 * @param allow
 	 */
 	public void reviewFood(Food food, boolean allow) {
-		// TODO - implement Admin.reviewFood
-		throw new UnsupportedOperationException();
+		food.setApproved(allow);
 	}
 
 	/**
@@ -46,8 +43,8 @@ public class Admin extends User {
 	 * @param food
 	 */
 	public void removeFood(Food food) {
-		// TODO - implement Admin.removeFood
-		throw new UnsupportedOperationException();
+		Dummy.foods.remove(food);
+		// TODO: remove all recipes that have this food?
 	}
 
 	/**
@@ -55,8 +52,8 @@ public class Admin extends User {
 	 * @param recipe
 	 */
 	public void removeRecipe(Recipe recipe) {
-		// TODO - implement Admin.removeRecipe
-		throw new UnsupportedOperationException();
+		Dummy.recipes.remove(recipe);
+		// TODO: prob need to clear this somewhere else as well.
 	}
 
 	/**

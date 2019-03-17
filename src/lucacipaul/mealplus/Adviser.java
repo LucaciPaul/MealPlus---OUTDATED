@@ -94,17 +94,21 @@ public class Adviser extends User {
 	 * @param customer
 	 */
 	public void addCustomer(Customer customer) {
-		// TODO - implement Adviser.addCustomer
-		throw new UnsupportedOperationException();
+		this.customers.add(customer);
 	}
 
 	/**
 	 * 
 	 * @param customer
 	 */
-	public void sendAssociationRequest(Customer customer) {
-		// TODO - implement Adviser.sendAssociationRequest
-		throw new UnsupportedOperationException();
+	// Probably want to return a boolean, so that the adviser knows if he sent
+	// an invite successfully.
+	public boolean sendAssociationRequest(Customer customer) {
+		if(customer.getAdviser() != null) return false; // The user is already associated with an adviser, cannot sent another request.
+
+		// TODO:
+
+		return true;
 	}
 
 	public boolean getApproved() {
