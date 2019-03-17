@@ -17,7 +17,7 @@ public class Admin extends User {
 	 * @param allow
 	 */
 	public void reviewRecipe(Recipe recipe, boolean allow) {
-		recipe.setApproved(allow);
+		recipe.setPublic(allow);
 	}
 
 	/**
@@ -26,7 +26,7 @@ public class Admin extends User {
 	 * @param allow
 	 */
 	public void reviewFood(Food food, boolean allow) {
-		food.setApproved(allow);
+		food.setPublic(allow);
 	}
 
 	/**
