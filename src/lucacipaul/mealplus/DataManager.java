@@ -1,6 +1,6 @@
 package lucacipaul.mealplus;
 
-import java.nio.charset.StandardCharsets;
+import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -9,12 +9,9 @@ public class DataManager {
 
 	private static DataManager instance = null;
 
-	private ArrayList<User> users;
-
-	private DataManager() {
-		Dummy.set();
-		users = Dummy.customers; // Err
-	}
+	private static User loggedUser = null;
+	
+	private DataManager() {	}
 
 	public static DataManager getInstance() {
 		if(instance == null) {
@@ -28,8 +25,21 @@ public class DataManager {
 	 * @param email
 	 */
 	public ArrayList<User> searchAccount(String email) {
-		// TODO - implement DataManager.searchAccount
-		throw new UnsupportedOperationException();
+		ArrayList<User> users = new ArrayList<User>();
+		
+		for (User usr : Dummy.customers) {
+			if(usr.getEmail().contains(email))
+					users.add(usr);
+		}
+		for (User usr : Dummy.advisers) {
+			if(usr.getEmail().contains(email))
+					users.add(usr);
+		}
+		for (User usr : Dummy.admins) {
+			if(usr.getEmail().contains(email))
+					users.add(usr);
+		}
+		return users;
 	}
 
 	/**
@@ -42,9 +52,66 @@ public class DataManager {
 	 * @param searchSelfMade
 	 * @param recommend
 	 */
-	public ArrayList<DietLogEntry> searchItems(String token, Amenities amenities, Types types, Sellpoints sellpoints, boolean searchFrequentlyEaten, boolean searchSelfMade, boolean recommend) {
-		// TODO - implement DataManager.searchItems
-		throw new UnsupportedOperationException();
+	public ArrayList<DietLogEntry> searchItems(
+			String token,
+			ArrayList<Amenities> amenities, ArrayList<Types> types, ArrayList<Sellpoints> sellpoints,
+			boolean searchFrequentlyEaten, boolean searchSelfMade, boolean recommend)
+	{	
+		ArrayList<DietLogEntry> yield = new ArrayList<DietLogEntry>();
+		if(loggedUser != null) {
+			if(loggedUser instanceof Customer) {
+				if(searchSelfMade && !searchFrequentlyEaten) {
+					ArrayList<Food> customerOwnedFood = ((Customer) loggedUser).getOwnedFood();
+					ArrayList<Recipe> customerOwnedRecipe = ((Customer) loggedUser).getOwnedRecipes();
+					if(!customerOwnedFood.isEmpty()) {
+						
+					}
+					if(!customerOwnedRecipe.isEmpty()) {
+						
+					}
+					
+				} else if(!searchSelfMade && searchFrequentlyEaten) {
+					ArrayList<DietLogEntry> customerFreqEaten = ((Customer) loggedUser).getFrequentlyEaten();
+					if(!customerFreqEaten.isEmpty()) {
+						
+					}
+					
+				} else {
+					ArrayList<DietLogEntry> customerFreqEaten = ((Customer) loggedUser).getFrequentlyEaten();
+					if(!customerFreqEaten.isEmpty()) {
+						ArrayList<Food> customerOwnedFood = ((Customer) loggedUser).getOwnedFood();
+						ArrayList<Recipe> customerOwnedRecipe = ((Customer) loggedUser).getOwnedRecipes();
+						
+						for(DietLogEntry dietLogEntry : ((Customer) loggedUser).getFrequentlyEaten()) {
+							if(!customerOwnedFood.isEmpty()) {
+								
+							}
+							if(!customerOwnedRecipe.isEmpty()) {
+								
+							}
+							if(customerOwnedFood.isEmpty() &&
+									customerOwnedRecipe.isEmpty()) {
+								// from frequently eaten only.
+							}
+						}
+					}
+				}
+			}
+			if(!searchFrequentlyEaten && !searchSelfMade) {
+				//Dummy.foods;
+				//Dummy.recipes;
+			}
+		}
+		
+		if(yield.isEmpty()) {
+			return null;
+		}
+		return yield;
+		
+		// types, amenities, sellpoints got to be instanceof ArrayList<..>();
+		// searchFrequentlyEaten of which Customer? Where to find that Customer?
+		// recommend based on whose nutritional values?
+		// search by @param token
 	}
 
 	/**
@@ -53,8 +120,7 @@ public class DataManager {
 	 * @param toggle
 	 */
 	public void toggleDietLog(DietLog dietLog, boolean toggle) {
-		// TODO - implement DataManager.toggleDietLog
-		throw new UnsupportedOperationException();
+		dietLog.setClosed(toggle);
 	}
 
 	/**
@@ -62,8 +128,13 @@ public class DataManager {
 	 * @param dietLog
 	 */
 	public Report generateReport(DietLog dietLog) {
-		// TODO - implement DataManager.generateReport
-		throw new UnsupportedOperationException();
+		Report report = new Report();
+		dietLog.setClosed(true);
+		report.setDietLog(dietLog);
+		
+		// compute nutritional values - yet corrupt
+		
+		return report;
 	}
 
 	/**
@@ -71,20 +142,19 @@ public class DataManager {
 	 * @param email
 	 * @param pwd
 	 */
-	public boolean login(String email, String pwd) {
+	public User login(String email, String pwd) { // works
 
 		// No need to sanitise parameters, as if they do not
 		// match then it will just return false.
-
-		for(int i = 0; i < users.size(); i++) {
-			if(users.get(i).getEmail().equalsIgnoreCase(email)) {
-				// Found user that has the specified email,
-				// return if the password matches.
-				return users.get(i).getPwd().equals(hashPassword(users.get(i), pwd));
-			}
+		ArrayList<User> users = searchAccount(email);
+		if(users.size() == 1 && users.get(0).getEmail().equalsIgnoreCase(email)) {
+			User usr = users.get(0);
+			if(usr.getPwd().equals(hashPassword(usr, pwd)))
+				loggedUser = usr;
+				return usr;
 		}
 		// Email was not found in the users array.
-		return false;
+		return null;
 	}
 
 	/**
@@ -101,12 +171,14 @@ public class DataManager {
 
 		// Sanity checks to make sure the email
 		// does not exist.
-		for(int i = 0; i < users.size(); i++) {
-			if(users.get(i).getEmail().equalsIgnoreCase(user.getEmail()))
-				return false; // Email already exists.
+		ArrayList<User> users = searchAccount(user.getEmail());
+		for(User u:users)
+			System.out.println(u.getEmail());
+		if(!users.isEmpty()) {
+			return false;
 		}
-
-		return users.add(user);
+		
+		return Dummy.customers.add((Customer) user); // corrupt due to unvalid downcasting
 	}
 
 	/**
@@ -115,8 +187,17 @@ public class DataManager {
 	 * @param approved
 	 */
 	public ArrayList<Adviser> searchAdviserAccounts(String email, boolean approved) {
-		// TODO - implement DataManager.searchAdviserAccounts
-		throw new UnsupportedOperationException();
+		ArrayList<Adviser> advisers = new ArrayList<Adviser>();
+		
+		for(Adviser adviser : advisers){
+			if(adviser.getApproved() == approved) {
+				if(adviser.getEmail().contains(email)) {
+					advisers.add(adviser);
+				}
+			}
+		}
+		
+		return advisers;
 	}
 
 	/**
@@ -125,8 +206,15 @@ public class DataManager {
 	 * @param isPublic
 	 */
 	public ArrayList<Items> searchUnpublishedItems(String token, boolean isPublic) {
-		// TODO - implement DataManager.searchUnpublishedItems
-		throw new UnsupportedOperationException();
+		ArrayList<Items> items = new ArrayList<Items>();
+		
+		for(Items item : items){
+			if(item.isPublic() == isPublic) {
+				// search token here - yet corrupt
+			}
+		}
+		
+		return items;
 	}
 
 	/**
@@ -154,11 +242,11 @@ public class DataManager {
 
 		// Salt password in order to protect it from rainbow table attacks.
 		String saltedPassword = user.getLastName() + password + user.getLastName() + user.getRegistrationDate().toString();
-		byte[] hashedBytes = md.digest(saltedPassword.getBytes(StandardCharsets.UTF_8));
+		byte[] hashedBytes = md.digest(saltedPassword.getBytes(Charset.forName("UTF_8")));
 
 		// Convert hash bytes back to a string, as User contains
 		// a string, and return it.
-		return new String(hashedBytes, StandardCharsets.UTF_8);
+		return new String(hashedBytes, Charset.forName("UTF_8"));
 	}
 
 	private static boolean sanityCheckInputField(String input, boolean password) {
