@@ -4,12 +4,14 @@ import lucacipaul.mealplus.Customer;
 import lucacipaul.mealplus.DataManager;
 import lucacipaul.mealplus.User;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Scanner;
 
 public class DataManagerTest {
 	
 	static Scanner reader = new Scanner(System.in);  // Reading from System.in
+	static User currentUser;
 
     public static void main(String[] args) {
     	Dummy.set();
@@ -32,11 +34,17 @@ public class DataManagerTest {
 		int o = reader.nextInt();
 		switch(o) {
 			case 1:
-				User usr = register();
-				menu(usr.getLastName() + " " + usr.getFirstName(), true);
+				currentUser = register();
+				menu(currentUser.getLastName() + " " + currentUser.getFirstName(), true);
 			case 2:
-				User usr1 = login();
-				menu(usr1.getLastName() + " " + usr1.getFirstName(), true);
+				currentUser = login();
+				menu(currentUser.getLastName() + " " + currentUser.getFirstName(), true);
+			case 3:
+				ArrayList<Items> items = DataManager.getInstance().searchUnpublishedItems("Eggs", true);
+				for (Items item : items) {
+					System.out.println("Item: " + item.getName() + " (" + item.isPublic() + ")");
+				}
+				menu(currentUser.getLastName() + " " + currentUser.getFirstName(), true);
 			case 4:
 				menu("Guest", false);
 		}

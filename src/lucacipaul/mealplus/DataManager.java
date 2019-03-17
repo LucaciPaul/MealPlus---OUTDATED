@@ -180,8 +180,9 @@ public class DataManager {
 			return false;
 		}
 
-		if(user instanceof Customer) return Dummy.customers.add((Customer) user); // corrupt due to unvalid downcasting
+		if(user instanceof Customer) return Dummy.customers.add((Customer) user);
 		if(user instanceof Adviser) return Dummy.advisers.add((Adviser) user);
+		// TODO: decide if admins should be added through register?
 		return false;
 	}
 
@@ -212,10 +213,15 @@ public class DataManager {
 	public ArrayList<Items> searchUnpublishedItems(String token, boolean isPublic) {
 		ArrayList<Items> items = new ArrayList<Items>();
 		
-		for(Items item : items){
-			if(item.isPublic() == isPublic) {
-				// search token here - yet corrupt
-			}
+		for(Items item : Dummy.foods){
+			if(item.isPublic() == isPublic)
+				if(item.getName().toLowerCase().contains(token.toLowerCase()))
+					items.add(item);
+		}
+		for(Items item : Dummy.recipes){ // TODO: find a cleaner (code-wise) way to search through both arrays?
+			if(item.isPublic() == isPublic)
+				if(item.getName().toLowerCase().contains(token.toLowerCase()))
+					items.add(item);
 		}
 		
 		return items;
