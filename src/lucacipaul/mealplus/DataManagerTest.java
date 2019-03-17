@@ -40,7 +40,7 @@ public class DataManagerTest {
 				currentUser = login();
 				menu(currentUser.getLastName() + " " + currentUser.getFirstName(), true);
 			case 3:
-				ArrayList<Items> items = DataManager.getInstance().searchUnpublishedItems("Eggs", true);
+				ArrayList<Items> items = DataManager.getInstance().searchUnpublishedItems("toast", true);
 				for (Items item : items) {
 					System.out.println("Item: " + item.getName() + " (" + item.isPublic() + ")");
 				}

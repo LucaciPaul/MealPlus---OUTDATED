@@ -218,10 +218,14 @@ public class DataManager {
 				if(item.getName().toLowerCase().contains(token.toLowerCase()))
 					items.add(item);
 		}
-		for(Items item : Dummy.recipes){ // TODO: find a cleaner (code-wise) way to search through both arrays?
-			if(item.isPublic() == isPublic)
-				if(item.getName().toLowerCase().contains(token.toLowerCase()))
+		for(Items item : Dummy.recipes){
+			if(item.isPublic() == isPublic) {
+				Recipe recipe = (Recipe) item;
+				if(tokenMatch(token, recipe.getName())     ||
+				   tokenMatch(token, recipe.getTutorial()) ||
+				   productsTokenMatch(token, recipe.getIngredients()) )
 					items.add(item);
+			}
 		}
 		
 		return items;
@@ -264,6 +268,18 @@ public class DataManager {
 		   input.length() <= (password?6:1) || // Password must be at least 6 characters long for security purposes.
 		   input.length() > 512) return false;
 		return true;
+	}
+
+	private static boolean productsTokenMatch(String token, ArrayList<String> products) {
+		for(String s : products) {
+			if(s.toLowerCase().contains(token.toLowerCase()))
+				return true;
+		}
+		return false;
+	}
+
+	private static boolean tokenMatch(String token, String item) {
+		return item != null && item.toLowerCase().contains(token.toLowerCase());
 	}
 
 }

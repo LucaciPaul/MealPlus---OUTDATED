@@ -73,7 +73,8 @@ public class Dummy {
     	ArrayList<String> ingredients = new ArrayList<String>(); ingredients.add("1x Bread"); ingredients.add("1/4x Avocado");
     	recipe.setFoodProduct(food);
     	recipe.setName("Avocado Toast"); recipe.setFoodProduct(foods.get(1)); recipe.setPublic(true); recipe.setTypes(types); recipe.setAmenities(amenities);
-    	// recipe.setTutorial("Lorem Ipsum\nlorem ipsum\nlOrem iPsum"); recipe.setIngredients(ingredients); - unsupported for now.
+    	recipe.setTutorial("Lorem Ipsum\nlorem ipsum\nlOrem iPsum"); recipe.setIngredients(ingredients);
+		recipes.add(recipe);
     	
     	
     	
