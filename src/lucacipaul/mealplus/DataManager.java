@@ -212,7 +212,7 @@ public class DataManager {
 	 */
 	public ArrayList<Items> searchUnpublishedItems(String token, boolean isPublic) {
 		ArrayList<Items> items = new ArrayList<Items>();
-		
+		//
 		for(Items item : Dummy.foods){
 			if(item.isPublic() == isPublic)
 				if(item.getName().toLowerCase().contains(token.toLowerCase()))
