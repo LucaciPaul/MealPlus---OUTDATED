@@ -43,6 +43,66 @@ public class DataManager {
 		return users;
 	}
 
+	private ArrayList<Items> filterItems(ArrayList<Items> items, ArrayList<Amenities> amenities, ArrayList<Types> types, ArrayList<Sellpoints> sellpoints) {
+		ArrayList<Items> entries = new ArrayList<Items>();
+		for(Items item : items) {
+			// Do a general filter on items.
+			if(DataManager.ContainsArrayItem(amenities, item.getAmenities()) ||
+			   DataManager.ContainsArrayItem(types, item.getTypes()) 		 ) {
+
+					// Perform more specific filter depending if the item
+					// is a food or a recipe object.
+					if(item instanceof Food) {
+						Food food = (Food)item;
+						if(DataManager.ContainsArrayItem(sellpoints, food.getSellpoints()))
+							entries.add(item);
+					}
+					if(item instanceof Recipe) {
+						Recipe recipe = (Recipe)item;
+						entries.add(item);
+					}
+			}
+		}
+		return entries;
+	}
+
+	private static <T> boolean ContainsArrayItem(ArrayList<T> i, ArrayList<T> o) {
+		for (T t : o)
+			if(i.contains(t))
+				return true;
+		return false;
+	}
+
+	private static <T extends Items> void ConcatItems(ArrayList<Items> original, ArrayList<T> add) {
+		for(T a : add)
+			original.add(a);
+	}
+
+	private static ArrayList<Items> DietLogEntriesToItems(ArrayList<DietLogEntry> entries) {
+		ArrayList<Items> items = new ArrayList<Items>();
+		for(DietLogEntry entry : entries)
+			items.add(entry.getEntry());
+		return items;
+	}
+
+	private static ArrayList<DietLogEntry> ItemsToDietLogEntries(ArrayList<Items> items) {
+		ArrayList<DietLogEntry> entries = new ArrayList<DietLogEntry>();
+
+		for(Items item : items) {
+			DietLogEntry entry = new DietLogEntry();
+			if(item instanceof Food) {
+				Food food = (Food)item;
+				entry.setFood(food);
+			}
+			if(item instanceof Recipe) {
+				Recipe recipe = (Recipe)item;
+				entry.setRecipe(recipe);
+			}
+		}
+
+		return entries;
+	}
+
 	/**
 	 * 
 	 * @param token
@@ -53,66 +113,39 @@ public class DataManager {
 	 * @param searchSelfMade
 	 * @param recommend
 	 */
-	public ArrayList<DietLogEntry> searchItems(
+	public ArrayList<DietLogEntry> searchItems(Customer customer,
 			String token,
 			ArrayList<Amenities> amenities, ArrayList<Types> types, ArrayList<Sellpoints> sellpoints,
 			boolean searchFrequentlyEaten, boolean searchSelfMade, boolean recommend)
-	{	
-		ArrayList<DietLogEntry> yield = new ArrayList<DietLogEntry>();
-		if(loggedUser != null) {
-			if(loggedUser instanceof Customer) {
-				if(searchSelfMade && !searchFrequentlyEaten) {
-					ArrayList<Food> customerOwnedFood = ((Customer) loggedUser).getOwnedFood();
-					ArrayList<Recipe> customerOwnedRecipe = ((Customer) loggedUser).getOwnedRecipes();
-					if(!customerOwnedFood.isEmpty()) {
-						
-					}
-					if(!customerOwnedRecipe.isEmpty()) {
-						
-					}
-					
-				} else if(!searchSelfMade && searchFrequentlyEaten) {
-					ArrayList<DietLogEntry> customerFreqEaten = ((Customer) loggedUser).getFrequentlyEaten();
-					if(!customerFreqEaten.isEmpty()) {
-						
-					}
-					
-				} else {
-					ArrayList<DietLogEntry> customerFreqEaten = ((Customer) loggedUser).getFrequentlyEaten();
-					if(!customerFreqEaten.isEmpty()) {
-						ArrayList<Food> customerOwnedFood = ((Customer) loggedUser).getOwnedFood();
-						ArrayList<Recipe> customerOwnedRecipe = ((Customer) loggedUser).getOwnedRecipes();
-						
-						for(DietLogEntry dietLogEntry : ((Customer) loggedUser).getFrequentlyEaten()) {
-							if(!customerOwnedFood.isEmpty()) {
-								
-							}
-							if(!customerOwnedRecipe.isEmpty()) {
-								
-							}
-							if(customerOwnedFood.isEmpty() &&
-									customerOwnedRecipe.isEmpty()) {
-								// from frequently eaten only.
-							}
-						}
-					}
-				}
-			}
-			if(!searchFrequentlyEaten && !searchSelfMade) {
-				//Dummy.foods;
-				//Dummy.recipes;
-			}
+	{
+
+		// All items that need to be filtered need to be stored in this array,
+		// this will be then filtered and placed into 'filtered'.
+		ArrayList<Items> unfiltered = new ArrayList<Items>();
+
+		// Add items to unfiltered depending on settings.
+		if(searchSelfMade) {
+			ConcatItems(unfiltered, customer.getOwnedFood());
+			ConcatItems(unfiltered, customer.getOwnedRecipes());
 		}
-		
-		if(yield.isEmpty()) {
-			return null;
+		if(searchFrequentlyEaten) ConcatItems(unfiltered, DietLogEntriesToItems(customer.getFrequentlyEaten()));
+		if(!searchSelfMade && !searchFrequentlyEaten) {
+			ConcatItems(unfiltered, Dummy.foods);
+			ConcatItems(unfiltered, Dummy.recipes);
 		}
-		return yield;
-		
-		// types, amenities, sellpoints got to be instanceof ArrayList<..>();
-		// searchFrequentlyEaten of which Customer? Where to find that Customer?
-		// recommend based on whose nutritional values?
-		// search by @param token
+
+		// Store all valid entries here, this will
+		// then be returned by the function.
+		ArrayList<DietLogEntry> entries = new ArrayList<DietLogEntry>();
+
+		// Filter items by token and other settings.
+		ArrayList<Items> tokenSearchedItems = searchUnpublishedItems(token, true, unfiltered);
+		ArrayList<Items> filtered = filterItems(tokenSearchedItems, amenities, types, sellpoints);
+
+
+		// TODO: recommendations.
+
+		return ItemsToDietLogEntries(filtered);
 	}
 
 	/**
@@ -211,23 +244,30 @@ public class DataManager {
 	 * @param isPublic
 	 */
 	public ArrayList<Items> searchUnpublishedItems(String token, boolean isPublic) {
+		ArrayList<Items> all = new ArrayList<Items>();
+
+		for(Items item : Dummy.foods) all.add(item);
+		for(Items item : Dummy.recipes) all.add(item);
+
+		return searchUnpublishedItems(token, isPublic, all);
+	}
+	public ArrayList<Items> searchUnpublishedItems(String token, boolean isPublic, ArrayList<Items> all) {
 		ArrayList<Items> items = new ArrayList<Items>();
-		//
-		for(Items item : Dummy.foods){
+
+		for(Items item : all) {
 			if(item.isPublic() == isPublic)
-				if(item.getName().toLowerCase().contains(token.toLowerCase()))
-					items.add(item);
+				if(item.getName().toLowerCase().contains(token.toLowerCase())) {
+					if(item instanceof Food) items.add(item);
+					if (item instanceof Recipe) {
+						Recipe recipe = (Recipe) item;
+						if(tokenMatch(token, recipe.getName())     ||
+						   tokenMatch(token, recipe.getTutorial()) ||
+						   productsTokenMatch(token, recipe.getIngredients()))
+							items.add(item);
+					}
+				}
 		}
-		for(Items item : Dummy.recipes){
-			if(item.isPublic() == isPublic) {
-				Recipe recipe = (Recipe) item;
-				if(tokenMatch(token, recipe.getName())     ||
-				   tokenMatch(token, recipe.getTutorial()) ||
-				   productsTokenMatch(token, recipe.getIngredients()) )
-					items.add(item);
-			}
-		}
-		
+
 		return items;
 	}
 
