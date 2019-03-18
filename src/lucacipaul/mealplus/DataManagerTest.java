@@ -5,6 +5,7 @@ import lucacipaul.mealplus.DataManager;
 import lucacipaul.mealplus.User;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Scanner;
 
@@ -40,10 +41,25 @@ public class DataManagerTest {
 				currentUser = login();
 				menu(currentUser.getLastName() + " " + currentUser.getFirstName(), true);
 			case 3:
-				ArrayList<Items> items = DataManager.getInstance().searchUnpublishedItems("toast", true);
-				for (Items item : items) {
-					System.out.println("Item: " + item.getName() + " (" + item.isPublic() + ")");
-				}
+
+				System.out.println("Running 'searchUnpublishedItems' test:");
+				ArrayList<Items> avocadoToast = DataManager.getInstance().searchUnpublishedItems("toast", true);
+				ArrayList<Items> eggs = DataManager.getInstance().searchUnpublishedItems("eggs", true);
+				for (Items item : avocadoToast) { System.out.println("AvocadoToast: " + item.getName() + " (" + item.isPublic() + ")"); }
+				for (Items item : eggs) 		{ System.out.println("Eggs: " + item.getName() + " (" + item.isPublic() + ")"); }
+
+				System.out.println("\r\nRunning 'searchItems' test:");
+				ArrayList<DietLogEntry> searchedToken = DataManager.getInstance().searchItems((Customer) currentUser, "eggs", null, null, null, false, false, false);
+				for (DietLogEntry item : searchedToken) { System.out.println("Searched (token): " + item.getEntry().getName() + " (" + item.getEntry().isPublic() + ")"); }
+				ArrayList<DietLogEntry> searchedAmenities = DataManager.getInstance().searchItems((Customer) currentUser, "", new ArrayList<Amenities>(Arrays.asList(Amenities.Cooker)), null, null, false, false, false);
+				for (DietLogEntry item : searchedAmenities) { System.out.println("Searched (amenities): " + item.getEntry().getName() + " (" + item.getEntry().isPublic() + ")"); }
+				ArrayList<DietLogEntry> searchedTypes = DataManager.getInstance().searchItems((Customer) currentUser, "", null, new ArrayList<Types>(Arrays.asList(Types.Vegetables)), null, false, false, false);
+				for (DietLogEntry item : searchedTypes) { System.out.println("Searched (types): " + item.getEntry().getName() + " (" + item.getEntry().isPublic() + ")"); }
+				ArrayList<DietLogEntry> searchedSellpoints = DataManager.getInstance().searchItems((Customer) currentUser, "", null, null, new ArrayList<Sellpoints>(Arrays.asList(Sellpoints.Sainsbury)), false, false, false);
+				for (DietLogEntry item : searchedSellpoints) { System.out.println("Searched (sellpoints): " + item.getEntry().getName() + " (" + item.getEntry().isPublic() + ")"); }
+
+
+
 				menu(currentUser.getLastName() + " " + currentUser.getFirstName(), true);
 			case 4:
 				menu("Guest", false);

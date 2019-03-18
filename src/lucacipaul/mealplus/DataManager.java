@@ -46,27 +46,26 @@ public class DataManager {
 	private ArrayList<Items> filterItems(ArrayList<Items> items, ArrayList<Amenities> amenities, ArrayList<Types> types, ArrayList<Sellpoints> sellpoints) {
 		ArrayList<Items> entries = new ArrayList<Items>();
 		for(Items item : items) {
-			// Do a general filter on items.
-			if(DataManager.ContainsArrayItem(amenities, item.getAmenities()) ||
-			   DataManager.ContainsArrayItem(types, item.getTypes()) 		 ) {
 
-					// Perform more specific filter depending if the item
-					// is a food or a recipe object.
-					if(item instanceof Food) {
-						Food food = (Food)item;
-						if(DataManager.ContainsArrayItem(sellpoints, food.getSellpoints()))
-							entries.add(item);
-					}
-					if(item instanceof Recipe) {
-						Recipe recipe = (Recipe)item;
-						entries.add(item);
-					}
+			// Special sellpoint check if item is Food
+			// (because only Food has sellpoints).
+			if(item instanceof Food) {
+				if(!DataManager.ContainsArrayItem(sellpoints, ((Food) item).getSellpoints())) continue;
+			}
+
+			// Do a general filter on items.
+			if(DataManager.ContainsArrayItem(amenities, item.getAmenities()) &&
+			   DataManager.ContainsArrayItem(types, item.getTypes()) 		 ) {
+				entries.add(item);
 			}
 		}
 		return entries;
 	}
 
 	private static <T> boolean ContainsArrayItem(ArrayList<T> i, ArrayList<T> o) {
+		if(i == null) return true;
+		if(o == null) return false;
+
 		for (T t : o)
 			if(i.contains(t))
 				return true;
@@ -98,6 +97,7 @@ public class DataManager {
 				Recipe recipe = (Recipe)item;
 				entry.setRecipe(recipe);
 			}
+			entries.add(entry);
 		}
 
 		return entries;

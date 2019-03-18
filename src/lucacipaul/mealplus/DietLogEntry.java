@@ -43,8 +43,8 @@ public class DietLogEntry {
 	}
 
 	public Items getEntry() {
-		// TODO - implement DietLogEntry.getEntry
-		throw new UnsupportedOperationException();
+		if(food != null) return food;
+		return recipe;
 	}
 
 }
