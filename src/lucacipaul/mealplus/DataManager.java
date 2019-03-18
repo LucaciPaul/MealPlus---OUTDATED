@@ -134,10 +134,6 @@ public class DataManager {
 			ConcatItems(unfiltered, Dummy.recipes);
 		}
 
-		// Store all valid entries here, this will
-		// then be returned by the function.
-		ArrayList<DietLogEntry> entries = new ArrayList<DietLogEntry>();
-
 		// Filter items by token and other settings.
 		ArrayList<Items> tokenSearchedItems = searchUnpublishedItems(token, true, unfiltered);
 		ArrayList<Items> filtered = filterItems(tokenSearchedItems, amenities, types, sellpoints);

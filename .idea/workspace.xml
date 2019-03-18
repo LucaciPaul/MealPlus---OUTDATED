@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="52aafe65-8f7e-4b66-bf0f-ac758e858336" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change beforePath="$PROJECT_DIR$/src/lucacipaul/mealplus/DataManager.java" afterPath="$PROJECT_DIR$/src/lucacipaul/mealplus/DataManager.java" />
     </list>
     <ignored path="$PROJECT_DIR$/bin/" />
@@ -18,19 +17,18 @@
       <file leaf-file-name="DataManager.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/lucacipaul/mealplus/DataManager.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="272">
-              <caret line="115" column="46" lean-forward="false" selection-start-line="115" selection-start-column="35" selection-end-line="115" selection-end-column="46" />
+            <state relative-caret-position="238">
+              <caret line="134" column="9" lean-forward="false" selection-start-line="134" selection-start-column="9" selection-end-line="134" selection-end-column="9" />
               <folding>
                 <element signature="e#1139#1146#0" expanded="true" />
                 <element signature="e#2175#2182#0" expanded="true" />
                 <element signature="e#2411#2425#0" expanded="true" />
                 <element signature="e#3321#3328#0" expanded="true" />
-                <element signature="e#3900#3914#0" expanded="true" />
-                <element signature="e#4337#4338#0" expanded="true" />
-                <element signature="e#4369#4370#0" expanded="true" />
-                <element signature="e#6265#6274#0" expanded="true" />
-                <element signature="e#6645#6652#0" expanded="true" />
-                <element signature="e#6956#6963#0" expanded="true" />
+                <element signature="e#4185#4186#0" expanded="true" />
+                <element signature="e#4217#4218#0" expanded="true" />
+                <element signature="e#6113#6122#0" expanded="true" />
+                <element signature="e#6493#6500#0" expanded="true" />
+                <element signature="e#6804#6811#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -495,12 +493,11 @@
             <element signature="e#2175#2182#0" expanded="true" />
             <element signature="e#2411#2425#0" expanded="true" />
             <element signature="e#3321#3328#0" expanded="true" />
-            <element signature="e#3900#3914#0" expanded="true" />
-            <element signature="e#4337#4338#0" expanded="true" />
-            <element signature="e#4369#4370#0" expanded="true" />
-            <element signature="e#6265#6274#0" expanded="true" />
-            <element signature="e#6645#6652#0" expanded="true" />
-            <element signature="e#6956#6963#0" expanded="true" />
+            <element signature="e#4185#4186#0" expanded="true" />
+            <element signature="e#4217#4218#0" expanded="true" />
+            <element signature="e#6113#6122#0" expanded="true" />
+            <element signature="e#6493#6500#0" expanded="true" />
+            <element signature="e#6804#6811#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -712,19 +709,18 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/lucacipaul/mealplus/DataManager.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="115" column="46" lean-forward="false" selection-start-line="115" selection-start-column="35" selection-end-line="115" selection-end-column="46" />
+        <state relative-caret-position="238">
+          <caret line="134" column="9" lean-forward="false" selection-start-line="134" selection-start-column="9" selection-end-line="134" selection-end-column="9" />
           <folding>
             <element signature="e#1139#1146#0" expanded="true" />
             <element signature="e#2175#2182#0" expanded="true" />
             <element signature="e#2411#2425#0" expanded="true" />
             <element signature="e#3321#3328#0" expanded="true" />
-            <element signature="e#3900#3914#0" expanded="true" />
-            <element signature="e#4337#4338#0" expanded="true" />
-            <element signature="e#4369#4370#0" expanded="true" />
-            <element signature="e#6265#6274#0" expanded="true" />
-            <element signature="e#6645#6652#0" expanded="true" />
-            <element signature="e#6956#6963#0" expanded="true" />
+            <element signature="e#4185#4186#0" expanded="true" />
+            <element signature="e#4217#4218#0" expanded="true" />
+            <element signature="e#6113#6122#0" expanded="true" />
+            <element signature="e#6493#6500#0" expanded="true" />
+            <element signature="e#6804#6811#0" expanded="true" />
           </folding>
         </state>
       </provider>
