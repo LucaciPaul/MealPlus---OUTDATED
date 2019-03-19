@@ -138,7 +138,8 @@ public class DataManager {
 		ArrayList<Items> tokenSearchedItems = searchUnpublishedItems(token, true, unfiltered);
 		ArrayList<Items> filtered = filterItems(tokenSearchedItems, amenities, types, sellpoints);
 
-
+		// TODO: check Customer blacklisted foods.
+		// TODO: check Customer disliked foods.
 		// TODO: recommendations.
 
 		return ItemsToDietLogEntries(filtered);

@@ -106,7 +106,7 @@ public class Adviser extends User {
 	public boolean sendAssociationRequest(Customer customer) {
 		if(customer.getAdviser() != null) return false; // The user is already associated with an adviser, cannot sent another request.
 
-		// TODO:
+		// TODO: @Paul, not sure how to set the assocation pending status.
 
 		return true;
 	}
