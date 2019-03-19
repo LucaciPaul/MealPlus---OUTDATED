@@ -1,4 +1,4 @@
-package lucacipaul.mealplus;
+package lucacipaul.mealplus.backend;
 
 import java.util.ArrayList;
 import java.util.Date;

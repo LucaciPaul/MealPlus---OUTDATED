@@ -1,8 +1,4 @@
-package lucacipaul.mealplus;
-
-import lucacipaul.mealplus.Customer;
-import lucacipaul.mealplus.DataManager;
-import lucacipaul.mealplus.User;
+package lucacipaul.mealplus.backend;
 
 import java.util.ArrayList;
 import java.util.Arrays;
