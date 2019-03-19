@@ -181,8 +181,7 @@ public class Customer extends User {
 	 * @param report
 	 */
 	public void addReport(Report report) {
-		// TODO - implement Customer.addReport
-		throw new UnsupportedOperationException();
+		this.reports.add(report);
 	}
 
 	/**
@@ -210,8 +209,9 @@ public class Customer extends User {
 	 * @param ownedFood
 	 */
 	public void submitFoodForReview(Food ownedFood) {
-		// TODO - implement Customer.submitFoodForReview
-		throw new UnsupportedOperationException();
+		ownedFood.setPublic(false); // Make sure the item is not approved.
+		this.ownedFood.add(ownedFood); // Add to personal food array.
+		Dummy.foods.add(ownedFood); // Add to global foods as well, will be used globally only once it gets approved (setPublic).
 	}
 
 	/**
@@ -219,8 +219,9 @@ public class Customer extends User {
 	 * @param ownedRecipe
 	 */
 	public void submitRecipeForReview(Recipe ownedRecipe) {
-		// TODO - implement Customer.submitRecipeForReview
-		throw new UnsupportedOperationException();
+		ownedRecipe.setPublic(false); // Make sure the item is not approved.
+		this.ownedRecipes.add(ownedRecipe); // Add to personal recipe array.
+		Dummy.recipes.add(ownedRecipe); // Add to global recipes as well, will be used globally only once it gets approved (setPublic).
 	}
 
 	public ArrayList<DietLogEntry> getDislikedItems() {
@@ -232,8 +233,9 @@ public class Customer extends User {
 	 * @param dislikedFood
 	 */
 	public void dislikeFood(Food dislikedFood) {
-		// TODO - implement Customer.dislikeFood
-		throw new UnsupportedOperationException();
+		DietLogEntry entry = new DietLogEntry();
+		entry.setFood(dislikedFood);
+		this.dislikedItems.add(entry);
 	}
 
 	/**
@@ -263,8 +265,7 @@ public class Customer extends User {
 	 * @param frequentlyEaten
 	 */
 	public void addFrequentlyEaten(DietLogEntry frequentlyEaten) {
-		// TODO - implement Customer.addFrequentlyEaten
-		throw new UnsupportedOperationException();
+		this.frequentlyEaten.add(frequentlyEaten);
 	}
 
 }
