@@ -1,17 +1,16 @@
 package lucacipaul.mealplus;
 
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.nio.charset.StandardCharsets;
 
 public class DataManager {
 
 	private static DataManager instance = null;
 
 	private static User loggedUser = null;
-	
+
 	private DataManager() {	}
 
 	public static DataManager getInstance() {
@@ -20,7 +19,11 @@ public class DataManager {
 		}
 		return instance;
 	}
-
+	
+	public static User getLoggedUser() {
+		return loggedUser;
+	}
+	
 	/**
 	 * 
 	 * @param email
@@ -52,10 +55,10 @@ public class DataManager {
 			if(item instanceof Food) {
 				if(!DataManager.ContainsArrayItem(sellpoints, ((Food) item).getSellpoints())) continue;
 			}
-
+			
 			// Do a general filter on items.
 			if(DataManager.ContainsArrayItem(amenities, item.getAmenities()) &&
-			   DataManager.ContainsArrayItem(types, item.getTypes()) 		 ) {
+			   DataManager.ContainsArrayItem(types, item.getTypes()) ) {
 				entries.add(item);
 			}
 		}
@@ -128,11 +131,22 @@ public class DataManager {
 			ConcatItems(unfiltered, customer.getOwnedFood());
 			ConcatItems(unfiltered, customer.getOwnedRecipes());
 		}
-		if(searchFrequentlyEaten) ConcatItems(unfiltered, DietLogEntriesToItems(customer.getFrequentlyEaten()));
+		if(searchFrequentlyEaten) {
+			ConcatItems(unfiltered, DietLogEntriesToItems(customer.getFrequentlyEaten()));
+		}
 		if(!searchSelfMade && !searchFrequentlyEaten) {
 			ConcatItems(unfiltered, Dummy.foods);
 			ConcatItems(unfiltered, Dummy.recipes);
 		}
+		
+		
+		/**
+		 * 1. How does the code from above avoid duplicates into unfiltered? self-made items can also be under frequently-eaten.
+		 * 2. What happens if the self-made and frequently-eaten are empty arrays?
+		 */
+		
+		
+		
 
 		// Filter items by token and other settings.
 		ArrayList<Items> tokenSearchedItems = searchUnpublishedItems(token, true, unfiltered);
@@ -140,6 +154,9 @@ public class DataManager {
 
 		// TODO: check Customer blacklisted foods.
 		// TODO: check Customer disliked foods.
+		
+		// TODO: implement the frequently-eaten
+		
 		// TODO: recommendations.
 
 		return ItemsToDietLogEntries(filtered);
@@ -212,7 +229,6 @@ public class DataManager {
 
 		if(user instanceof Customer) return Dummy.customers.add((Customer) user);
 		if(user instanceof Adviser) return Dummy.advisers.add((Adviser) user);
-		// TODO: decide if admins should be added through register?
 		return false;
 	}
 
@@ -293,8 +309,8 @@ public class DataManager {
 
 		// Salt password in order to protect it from rainbow table attacks.
 		String saltedPassword = user.getLastName() + password + user.getLastName() + user.getRegistrationDate().toString();
-		byte[] hashedBytes = md.digest(saltedPassword.getBytes(StandardCharsets.UTF_8)); // Charset.forName("UTF_8") - does not actually work. " java.nio.charset.UnsupportedCharsetException: UTF_8"
-
+		byte[] hashedBytes = md.digest(saltedPassword.getBytes(StandardCharsets.UTF_8));
+		
 		// Convert hash bytes back to a string, as User contains
 		// a string, and return it.
 		return new String(hashedBytes, StandardCharsets.UTF_8);
